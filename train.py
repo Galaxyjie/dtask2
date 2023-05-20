@@ -91,7 +91,7 @@ def get_training_augmentation():
             scale_limit=0.3,
             rotate_limit=(-45, 45),
             shift_limit=0.3,
-            p=0.5,
+            p=1,
             border_mode=0,
         ),
         albu.GaussNoise(p=0.2),
@@ -368,7 +368,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     # 模型名称
-    parser.add_argument("-arch", type=str, default="FPN", help="模型名称")
+    parser.add_argument("-arch", type=str, default="unetplusplus", help="模型名称")
     # encoder
     parser.add_argument(
         "-encoder", type=str, default="tu-efficientnetv2_rw_t", help="backbone"
