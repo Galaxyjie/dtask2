@@ -268,7 +268,7 @@ def main(args):
     # 训练
     min_loss = 100
     best_epoch = 0
-    for epoch in range(0, 5000):
+    for epoch in range(0, 300):
         print("\nEpoch: {}".format(epoch))
         train_logs = train_epoch.run(train_loader)
         valid_logs = valid_epoch.run(valid_loader)
