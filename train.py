@@ -75,7 +75,7 @@ class Dataset(BaseDataset):
 
     def __len__(self):
         if self.augmentation != None:
-            return 4 * len(self.ids)
+            return 10 * len(self.ids)
         return len(self.ids)
 
 
@@ -272,7 +272,7 @@ def main(args):
             torch.save(model, f"models/best_{model.name}_{IN_CHANNELS}.pth")
             print("Model saved!")
 
-        if epoch - best_epoch == 1:
+        if epoch - best_epoch == 30:
             print("Early stopping!")
             break
 
