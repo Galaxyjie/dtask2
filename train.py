@@ -371,7 +371,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     # 模型名称
-    parser.add_argument("-arch", type=str, default="unetplusplus", help="模型名称")
+    parser.add_argument("-arch", type=str, default="manet", help="模型名称")
     # encoder
     parser.add_argument(
         "-encoder", type=str, default="tu-efficientnetv2_rw_t", help="backbone"
