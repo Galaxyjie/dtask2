@@ -339,12 +339,12 @@ def main(args):
     def turn_to_str(image_list):
         outputs = []
         for image in image_list:
-            transform = torchvision.transforms.ToTensor()
             image = Image.fromarray(image).convert("L")
             image = image.resize((512, 512), Image.Resampling.BILINEAR)
-            image = transform(image)
-            image[image > 0] = 1
-            dots = np.where(image.flatten() == 1)[0]
+            # 转为numpy
+            image = np.array(image)
+            image[image > 0] = 255
+            dots = np.where(image.flatten() == 255)[0]
             run_lengths = []
             prev = -2
             for b in dots:
@@ -375,7 +375,7 @@ if __name__ == "__main__":
     parser.add_argument("-arch", type=str, default="manet", help="模型名称")
     # encoder
     parser.add_argument(
-        "-encoder", type=str, default="tu-efficientnetv2_rw_s", help="backbone"
+        "-encoder", type=str, default="tu-efficientnetv2_rw_t", help="backbone"
     )
     # batch_size
     parser.add_argument("-batch_size", type=int, default=1, help="batch_size")
