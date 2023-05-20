@@ -1,0 +1,13 @@
+/.vscode
+/1.py
+/123.ipynb
+/best_model.pth
+/cars segmentation (camvid) .ipynb
+/dataset.py
+/sample_submission.csv
+/segmentation_to_csv.py
+/submission copy.csv
+/submission.csv
+/test
+/train
+/__pycache__
