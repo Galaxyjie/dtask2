@@ -267,25 +267,25 @@ def main(args):
         optimizer, factor=0.5, patience=3, verbose=True
     )
     # 训练
-    # min_loss = 100
-    # best_epoch = 0
-    # for epoch in range(0, 300):
-    #     print("\nEpoch: {}".format(epoch))
-    #     train_logs = train_epoch.run(train_loader)
-    #     valid_logs = valid_epoch.run(valid_loader)
+    min_loss = 100
+    best_epoch = 0
+    for epoch in range(0, 300):
+        print("\nEpoch: {}".format(epoch))
+        train_logs = train_epoch.run(train_loader)
+        valid_logs = valid_epoch.run(valid_loader)
 
-    #     # do something (save model, change lr, etc.)
-    #     if min_loss > valid_logs["dice_loss"]:
-    #         min_loss = valid_logs["dice_loss"]
-    #         best_epoch = epoch
-    #         torch.save(model, f"models/best_{model.name}_{IN_CHANNELS}.pth")
-    #         print("Model saved!")
+        # do something (save model, change lr, etc.)
+        if min_loss > valid_logs["dice_loss"]:
+            min_loss = valid_logs["dice_loss"]
+            best_epoch = epoch
+            torch.save(model, f"models/best_{model.name}_{IN_CHANNELS}.pth")
+            print("Model saved!")
 
-    #     if epoch - best_epoch == 30:
-    #         print("Early stopping!")
-    #         break
+        if epoch - best_epoch == 30:
+            print("Early stopping!")
+            break
 
-    #     lr_scheduler.step(valid_logs["dice_loss"])
+        lr_scheduler.step(valid_logs["dice_loss"])
 
     # load best saved checkpoint
     best_model = torch.load(f"models/best_{model.name}_{IN_CHANNELS}.pth").eval()
