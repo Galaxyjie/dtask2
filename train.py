@@ -203,7 +203,7 @@ def main(args):
         valid_dataset, batch_size=args.batch_size, shuffle=False, num_workers=0
     )
 
-    ENCODER = args.model
+    ENCODER = args.encoder
     # ENCODER = 'timm-regnetx_002'
     ENCODER_WEIGHTS = "imagenet"
     CLASSES = ["eye"]
@@ -213,13 +213,21 @@ def main(args):
     DEVICE = "cuda"
     IN_CHANNELS = args.in_channels
     # create segmentation model with pretrained encoder
-    model = smp.UnetPlusPlus(
-        encoder_name=ENCODER,
-        encoder_weights=None,
-        in_channels=IN_CHANNELS,
+    model = smp.create_model(
+        args.arch,
+        encoder_name=args.encoder,
+        in_channels=args.in_channels,
+        encoder_weights="imagenet",
         classes=1,
         activation=ACTIVATION,
     )
+    # model = smp.UnetPlusPlus(
+    #     encoder_name=ENCODER,
+    #     encoder_weights="imagenet",
+    #     in_channels=IN_CHANNELS,
+    #     classes=1,
+    #     activation=ACTIVATION,
+    # )
     try:
         model = torch.load(f"models/best_{model.name}_{IN_CHANNELS}.pth")
         print(f"导入本地模型models/best_{model.name}_{IN_CHANNELS}成功")
@@ -359,8 +367,11 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
+    # 模型名称
+    parser.add_argument("-arch", type=str, default="FPN", help="模型名称")
+    # encoder
     parser.add_argument(
-        "-model", type=str, default="tu-efficientnetv2_rw_t", help="模型名称"
+        "-encoder", type=str, default="tu-efficientnetv2_rw_t", help="backbone"
     )
     # batch_size
     parser.add_argument("-batch_size", type=int, default=1, help="batch_size")
