@@ -360,10 +360,10 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--model", type=str, default="tu-efficientnetv2_rw_t", help="模型名称"
+        "-model", type=str, default="tu-efficientnetv2_rw_t", help="模型名称"
     )
     # batch_size
-    parser.add_argument("--batch_size", type=int, default=1, help="batch_size")
-    parser.add_argument("--in_channels", type=int, default=3, help="输入通道数")
+    parser.add_argument("-batch_size", type=int, default=1, help="batch_size")
+    parser.add_argument("-in_channels", type=int, default=3, help="输入通道数")
     args = parser.parse_args()
     main(args)
