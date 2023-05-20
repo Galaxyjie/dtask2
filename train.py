@@ -85,6 +85,7 @@ import albumentations as albu
 def get_training_augmentation():
     train_transform = [
         albu.HorizontalFlip(p=0.5),
+        albu.VerticalFlip(p=0.5),
         # albu.PadIfNeeded(min_height=576, min_width=576, always_apply=True, border_mode=0,value=0),
         # albu.RandomCrop(height=576, width=576, always_apply=True),
         albu.ShiftScaleRotate(
