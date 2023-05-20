@@ -18,8 +18,9 @@ class Dataset(BaseDataset):
         preprocessing=None,
     ):
         self.ids = os.listdir(images_dir)
+        self.mids = os.listdir(masks_dir)
         self.images_fps = [os.path.join(images_dir, image_id) for image_id in self.ids]
-        self.masks_fps = [os.path.join(masks_dir, image_id) for image_id in self.ids]
+        self.masks_fps = [os.path.join(masks_dir, image_id) for image_id in self.mids]
 
         # convert str names to class values on masks
         # self.class_values = [self.CLASSES.index(cls.lower()) for cls in classes]
@@ -45,7 +46,6 @@ class Dataset(BaseDataset):
         # image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         # #第三维为1
         # image = np.expand_dims(image, axis=2)
-
         mask = cv2.imread(self.masks_fps[i], 0)
         # 扩充边界 把565*584的图片变为576*584的图片
         mask = cv2.copyMakeBorder(mask, 0, 0, 5, 6, cv2.BORDER_CONSTANT, value=[0])
@@ -169,14 +169,14 @@ def getStat(train_data):
 # 主函数
 def main(args):
     DATA_DIR = "./data/eyes/"
-    x_train_dir = os.path.join(DATA_DIR, "train")
-    y_train_dir = os.path.join(DATA_DIR, "trainannot")
+    x_train_dir = "train/image"
+    y_train_dir = "train/labelpng"
 
-    x_valid_dir = os.path.join(DATA_DIR, "val")
-    y_valid_dir = os.path.join(DATA_DIR, "valannot")
+    x_valid_dir = "train/image"
+    y_valid_dir = "train/labelpng"
 
-    x_test_dir = os.path.join(DATA_DIR, "test")
-    y_test_dir = os.path.join(DATA_DIR, "testannot")
+    x_test_dir = "test/image"
+    y_test_dir = "train/labelpng"
     dataset = Dataset(x_train_dir, y_train_dir)
     # 计算mean和std
     mean, std = getStat(dataset)
@@ -265,29 +265,29 @@ def main(args):
     lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, factor=0.5, patience=3, verbose=True
     )
-    # 训练
-    min_loss = 100
-    best_epoch = 0
-    for epoch in range(0, 300):
-        print("\nEpoch: {}".format(epoch))
-        train_logs = train_epoch.run(train_loader)
-        valid_logs = valid_epoch.run(valid_loader)
+    # # 训练
+    # min_loss = 100
+    # best_epoch = 0
+    # for epoch in range(0, 300):
+    #     print("\nEpoch: {}".format(epoch))
+    #     train_logs = train_epoch.run(train_loader)
+    #     valid_logs = valid_epoch.run(valid_loader)
 
-        # do something (save model, change lr, etc.)
-        if min_loss > valid_logs["dice_loss"]:
-            min_loss = valid_logs["dice_loss"]
-            best_epoch = epoch
-            torch.save(model, f"models/best_{model.name}_{IN_CHANNELS}.pth")
-            print("Model saved!")
+    #     # do something (save model, change lr, etc.)
+    #     if min_loss > valid_logs["dice_loss"]:
+    #         min_loss = valid_logs["dice_loss"]
+    #         best_epoch = epoch
+    #         torch.save(model, f"models/best_{model.name}_{IN_CHANNELS}.pth")
+    #         print("Model saved!")
 
-        if epoch - best_epoch == 30:
-            print("Early stopping!")
-            break
+    #     if epoch - best_epoch == 30:
+    #         print("Early stopping!")
+    #         break
 
-        lr_scheduler.step(valid_logs["dice_loss"])
+    #     lr_scheduler.step(valid_logs["dice_loss"])
 
     # load best saved checkpoint
-    best_model = torch.load(f"models/best_{model.name}_{IN_CHANNELS}.pth")
+    best_model = torch.load(f"models/best_{model.name}_{IN_CHANNELS}.pth").eval()
     test_dataset = Dataset(
         x_test_dir,
         y_test_dir,
@@ -324,10 +324,13 @@ def main(args):
         pr_mask = pr_mask[:, 5:570]
         pr_mask = pr_mask * 255
 
-        img_save_path = os.path.join(f"results/{model.name}/", f"{n+1}.png")
+        img_save_path = os.path.join(
+            f"results/{model.name}/{os.path.basename(test_dataset.images_fps[n])}"
+        )
         cv2.imwrite(img_save_path, pr_mask)
         image_list.append(pr_mask)
-        name_list.append(f"{n+1}.png")
+        name_list.append(f"{os.path.basename(test_dataset.images_fps[n])}")
+        n += 1
     # 生成csv结果
     import pandas as pd
     from PIL import Image
