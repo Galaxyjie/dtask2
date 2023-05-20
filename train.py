@@ -266,26 +266,26 @@ def main(args):
     lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, factor=0.5, patience=3, verbose=True
     )
-    # # 训练
-    min_loss = 100
-    best_epoch = 0
-    for epoch in range(0, 300):
-        print("\nEpoch: {}".format(epoch))
-        train_logs = train_epoch.run(train_loader)
-        valid_logs = valid_epoch.run(valid_loader)
+    # 训练
+    # min_loss = 100
+    # best_epoch = 0
+    # for epoch in range(0, 300):
+    #     print("\nEpoch: {}".format(epoch))
+    #     train_logs = train_epoch.run(train_loader)
+    #     valid_logs = valid_epoch.run(valid_loader)
 
-        # do something (save model, change lr, etc.)
-        if min_loss > valid_logs["dice_loss"]:
-            min_loss = valid_logs["dice_loss"]
-            best_epoch = epoch
-            torch.save(model, f"models/best_{model.name}_{IN_CHANNELS}.pth")
-            print("Model saved!")
+    #     # do something (save model, change lr, etc.)
+    #     if min_loss > valid_logs["dice_loss"]:
+    #         min_loss = valid_logs["dice_loss"]
+    #         best_epoch = epoch
+    #         torch.save(model, f"models/best_{model.name}_{IN_CHANNELS}.pth")
+    #         print("Model saved!")
 
-        if epoch - best_epoch == 30:
-            print("Early stopping!")
-            break
+    #     if epoch - best_epoch == 30:
+    #         print("Early stopping!")
+    #         break
 
-        lr_scheduler.step(valid_logs["dice_loss"])
+    #     lr_scheduler.step(valid_logs["dice_loss"])
 
     # load best saved checkpoint
     best_model = torch.load(f"models/best_{model.name}_{IN_CHANNELS}.pth").eval()
@@ -375,7 +375,7 @@ if __name__ == "__main__":
     parser.add_argument("-arch", type=str, default="manet", help="模型名称")
     # encoder
     parser.add_argument(
-        "-encoder", type=str, default="tu-efficientnetv2_rw_t", help="backbone"
+        "-encoder", type=str, default="tu-efficientnetv2_rw_s", help="backbone"
     )
     # batch_size
     parser.add_argument("-batch_size", type=int, default=1, help="batch_size")
