@@ -176,7 +176,7 @@ def main(args):
     x_valid_dir = "train/imagepng"
     y_valid_dir = "train/labelpng"
 
-    x_test_dir = "test/image"
+    x_test_dir = "test/imagepng"
     y_test_dir = "train/labelpng"
     dataset = Dataset(x_train_dir, y_train_dir)
     # 计算mean和std
