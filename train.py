@@ -281,7 +281,7 @@ def main(args):
             torch.save(model, f"models/best_{model.name}_{IN_CHANNELS}.pth")
             print("Model saved!")
 
-        if epoch - best_epoch == 30:
+        if epoch - best_epoch == 20:
             print("Early stopping!")
             break
 
@@ -374,11 +374,10 @@ if __name__ == "__main__":
     # 模型名称
     parser.add_argument("-arch", type=str, default="manet", help="模型名称")
     # encoder
-    parser.add_argument(
-        "-encoder", type=str, default="tu-efficientnetv2_rw_t", help="backbone"
-    )
+    parser.add_argument("-encoder", type=str, default="resnet18", help="backbone")
     # batch_size
     parser.add_argument("-batch_size", type=int, default=1, help="batch_size")
     parser.add_argument("-in_channels", type=int, default=3, help="输入通道数")
     args = parser.parse_args()
+    print(args)
     main(args)
