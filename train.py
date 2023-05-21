@@ -242,7 +242,12 @@ def main(args):
         smp.utils.metrics.IoU(threshold=0.5),
     ]
 
-    optimizer = torch.optim.AdamW(
+    # optimizer = torch.optim.AdamW(
+
+    #    [ dict(params=model.parameters(), lr=0.001),]
+    # )
+    # 换成sgd优化器
+    optimizer = torch.optim.SGD(
         [
             dict(params=model.parameters(), lr=0.001),
         ]
@@ -264,7 +269,7 @@ def main(args):
         verbose=True,
     )
     lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer, factor=0.5, patience=3, verbose=True
+        optimizer, factor=0.5, patience=5, verbose=True
     )
     # 训练
     min_loss = 100
