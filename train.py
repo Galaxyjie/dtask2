@@ -85,6 +85,7 @@ import albumentations as albu
 def get_training_augmentation():
     train_transform = [
         albu.HorizontalFlip(p=0.5),
+        albu.VerticalFlip(p=0.5),
         # albu.PadIfNeeded(min_height=576, min_width=576, always_apply=True, border_mode=0,value=0),
         # albu.RandomCrop(height=576, width=576, always_apply=True),
         albu.ShiftScaleRotate(
@@ -265,7 +266,7 @@ def main(args):
     lr_scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, factor=0.5, patience=3, verbose=True
     )
-    # # 训练
+    # 训练
     min_loss = 100
     best_epoch = 0
     for epoch in range(0, 300):
@@ -338,12 +339,12 @@ def main(args):
     def turn_to_str(image_list):
         outputs = []
         for image in image_list:
-            transform = torchvision.transforms.ToTensor()
             image = Image.fromarray(image).convert("L")
             image = image.resize((512, 512), Image.Resampling.BILINEAR)
-            image = transform(image)
-            image[image > 0] = 1
-            dots = np.where(image.flatten() == 1)[0]
+            # 转为numpy
+            image = np.array(image)
+            image[image > 0] = 255
+            dots = np.where(image.flatten() == 255)[0]
             run_lengths = []
             prev = -2
             for b in dots:
