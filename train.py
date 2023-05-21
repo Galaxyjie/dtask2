@@ -170,10 +170,10 @@ def getStat(train_data):
 # 主函数
 def main(args):
     DATA_DIR = "./data/eyes/"
-    x_train_dir = "train/imagepng"
+    x_train_dir = "train/image"
     y_train_dir = "train/labelpng"
 
-    x_valid_dir = "train/imagepng"
+    x_valid_dir = "train/image"
     y_valid_dir = "train/labelpng"
 
     x_test_dir = "test/image"
@@ -242,16 +242,17 @@ def main(args):
         smp.utils.metrics.IoU(threshold=0.5),
     ]
 
-    # optimizer = torch.optim.AdamW(
-
-    #    [ dict(params=model.parameters(), lr=0.001),]
-    # )
-    # 换成sgd优化器
-    optimizer = torch.optim.SGD(
+    optimizer = torch.optim.AdamW(
         [
             dict(params=model.parameters(), lr=0.001),
         ]
     )
+    # 换成sgd优化器
+    # optimizer = torch.optim.SGD(
+    #     [
+    #         dict(params=model.parameters(), lr=0.001),
+    #     ]
+    # )
     train_epoch = smp.utils.train.TrainEpoch(
         model,
         loss=loss,
