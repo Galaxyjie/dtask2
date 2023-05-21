@@ -170,10 +170,10 @@ def getStat(train_data):
 # 主函数
 def main(args):
     DATA_DIR = "./data/eyes/"
-    x_train_dir = "train/image"
+    x_train_dir = "train/imagepng"
     y_train_dir = "train/labelpng"
 
-    x_valid_dir = "train/image"
+    x_valid_dir = "train/imagepng"
     y_valid_dir = "train/labelpng"
 
     x_test_dir = "test/image"
